@@ -41,7 +41,7 @@ class FLM {
 		$this->userdir = addslash($topDirectory);
 
 		$this->workdir = $this->userdir.(($this->postlist['dir'] !== false) ? $this->postlist['dir']: '');
-		$this->xmlrpc = new rxmlrpcfix();
+		$this->xmlrpc = new rXMLRPCRequest();
 
 		if(($this->postlist['dir'] === FALSE) || !$this->remote_test($this->workdir, 'd')) { $this->output['errcode'] = 2; die();}
 		elseif ($this->postlist['action'] === FALSE) { $this->sdie('No action defined');}
@@ -265,10 +265,8 @@ class FLM {
 
 
 	public function extract($archive, $target) {
-		
 		if(($archive === FALSE) || !LFS::is_file($this->userdir.$archive))  {$this->output['errcode'] = 6; return false; }
 		if(($target === FALSE) || LFS::is_file($this->userdir.$target))  {$this->output['errcode'] = 16; return false; }
-
 		switch($this->fext($archive)) {
 			case 'rar':
 				$bin = 'rar';
@@ -284,7 +282,6 @@ class FLM {
 			default:
 				$this->output['errcode'] = 18; return false; 
 		}
-
 		$this->batch_exec(array("sh", "-c", escapeshellarg($this->fman_path.'/scripts/extract')." ".escapeshellarg(getExternal($bin))." ".
 							escapeshellarg($this->temp['dir'])." ".escapeshellarg($this->userdir.$archive)." ".escapeshellarg($this->userdir.$target)));
 
@@ -640,7 +637,7 @@ class FLM {
 
   	public function __destruct() {
 
-		if($this->shout) {cachedEcho(json_encode($this->output));}
+		if($this->shout) {cachedEcho(safe_json_encode($this->output));}
    	}
 
 

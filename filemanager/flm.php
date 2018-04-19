@@ -3,10 +3,8 @@
 $rtp = realpath(dirname(__FILE__).'/../../php/xmlrpc.php');
 
 require_once($rtp);
-include('xmlfix.php');
-
-include('conf.php');
-include('flm.class.php');
+eval( getPluginConf( 'filemanager' ) );
+require_once('flm.class.php');
 
 
 $e = new FLM();
